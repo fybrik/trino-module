@@ -1,0 +1,5 @@
+###### Requirements without version specifiers ######
+trino
+
+###### Requirements with version specifiers ######
+
