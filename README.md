@@ -42,7 +42,4 @@ while [[ $(kubectl get fybrikapplication my-notebook -n default -o 'jsonpath={.s
 
 Wait For the pod `my-notebook-default-trino-module-xxxx` to be completed. This pod runs a python code that registers the asset in trino and applies the policy to create a virtual dataset. The user can use the following credentials to connect to trino:
 
-    "name": "newUser", 
-    "password": "testpassword123"
-
-
+    "name": "user1", 
