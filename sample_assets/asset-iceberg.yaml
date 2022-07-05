@@ -19,6 +19,9 @@ spec:
     tags:
       finance: true
     columns:
-      - name: _c1
+      - name: a
+        tags:
+          PII: true
+      - name: d
         tags:
           PII: true
