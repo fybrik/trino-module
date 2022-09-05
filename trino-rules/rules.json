@@ -1,0 +1,48 @@
+{
+    "catalogs": [
+        {
+            "group": "admins",
+            "allow": "all"
+        },
+        {
+            "group": "demo_dv_dev",
+            "allow": "all"
+        },
+        {
+            "allow": "read-only"
+        }
+    ],
+    "schemas": [
+        {
+            "group": "admins",
+            "owner": true
+        },
+        {
+            "owner": false
+        }
+    ],
+    "tables": [
+        {
+            "group": "admins",
+            "privileges": [
+                "SELECT",
+                "INSERT",
+                "DELETE",
+                "OWNERSHIP",
+                "GRANT_SELECT"
+            ]
+        },
+        {
+            "group": "demo_dv_dev",
+            "catalog": "iceberg",
+            "schema": "icebergtrino",
+            "table": "view1",
+            "privileges": [
+                "SELECT",
+                "INSERT",
+                "DELETE",
+                "OWNERSHIP"
+            ]
+        }
+    ]
+}

@@ -42,15 +42,15 @@ def execute_query(cur, query):
     # return res
 
 def connect_user(username, catalog):
-    # conn = trino.dbapi.connect(host='host.docker.internal', port=8080, user=username, catalog=catalog)
-    conn = trino.dbapi.connect(host='localhost', port=9090, user=username, catalog=catalog)
+    conn = trino.dbapi.connect(host='host.docker.internal', port=9090, user=username, catalog=catalog)
+    # conn = trino.dbapi.connect(host='localhost', port=9090, user=username, catalog=catalog)
     cur = conn.cursor()
     return cur
 
 def get_details_from_conf():
     """ Parse the configuration and get the data details and policies """
-    # with open("/etc/conf/conf.yaml", 'r') as stream:
-    with open("sample-conf.yaml", 'r') as stream:
+    with open("/etc/conf/conf.yaml", 'r') as stream:
+    # with open("sample-conf.yaml", 'r') as stream:
         content = yaml.safe_load(stream)
         for key, val in content.items():
             if "data" in key:
@@ -138,8 +138,8 @@ if __name__ == "__main__":
 
 
     print("create view")
-    # view_query = "create view iceberg.icebergtrino.viewtest as select event_time, message from iceberg.icebergtrino.logs"
-    view_query = "create view iceberg.icebergtrino.viewtest2 as " + sql_view
+    # view_query = "create view iceberg.icebergtrino.view1 as select event_time, message from iceberg.icebergtrino.logs"
+    view_query = "create view iceberg.icebergtrino.view1 as " + sql_view
     print(view_query)
     res = execute_query(cur, view_query)
     print(res)
@@ -155,16 +155,16 @@ if __name__ == "__main__":
     print(res)
 
     print("user1 select from the view")
-    select_query = 'select * from iceberg.icebergtrino.viewtest2'
+    select_query = 'select * from iceberg.icebergtrino.view1'
     res = execute_query(cur, select_query)
     print(res)
 
     # Give permissions to user1
-    update_rules("user1", "iceberg", "icebergtrino", "viewtest2", ["SELECT"])
+    # update_rules("user1", "iceberg", "icebergtrino", "view1", ["SELECT"])
     time.sleep(10)
     
     print("user1 select from the view")
-    select_query = 'select * from iceberg.icebergtrino.viewtest2'
+    select_query = 'select * from iceberg.icebergtrino.view1'
     res = execute_query(cur, select_query)
     print(res)
 
