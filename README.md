@@ -1,5 +1,8 @@
 # trino-module
 
+### Install trino
+Use [`trino-getting-started` github repository](https://github.com/bitsondatadev/trino-getting-started) to run trino. First, add the files in the `trino-rules` directory to `trino-getting-started/iceberg/trino-iceberg-minio/etc` directory. Then, run `docker-compose up -d` command from `iceberg/trino-iceberg-minio` directory.
+
 ### Install fybrik
 Fybrik Quick Start (v0.6), without the section of `Install modules`.
 
