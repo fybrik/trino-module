@@ -42,8 +42,8 @@ def execute_query(cur, query):
     # return res
 
 def connect_user(username, catalog):
-    conn = trino.dbapi.connect(host='host.docker.internal', port=9090, user=username, catalog=catalog)
-    # conn = trino.dbapi.connect(host='localhost', port=9090, user=username, catalog=catalog)
+    conn = trino.dbapi.connect(host='host.docker.internal', port=8080, user=username, catalog=catalog)
+    # conn = trino.dbapi.connect(host='localhost', port=8080, user=username, catalog=catalog)
     cur = conn.cursor()
     return cur
 
