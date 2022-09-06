@@ -10,8 +10,8 @@ spec:
     connection:
       name: s3
       s3:
-        endpoint: "s3.eu-de.cloud-object-storage.appdomain.cloud"
-        bucket: "fybric-objectstorage-iceberg-demo/warehouse/db"
+        endpoint: "s3.us-east.cloud-object-storage.appdomain.cloud"
+        bucket: "iceberg"
         object_key: "table"
   metadata:
     name: "Iceberg Data Asset"

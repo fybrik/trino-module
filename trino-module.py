@@ -97,7 +97,9 @@ if __name__ == "__main__":
     print(res)
 
     print("create schema")
-    schema_query = "create schema hive.icebergtrino  with (location = 's3a://iceberg/')"
+    schema_query = "create schema hive.icebergtrino with (location = 's3a://iceberg/')"
+    # schema_query = "create schema hive.icebergtrino with (location = 's3a://fybric-objectstorage-iceberg-demo/warehouse/db/')"
+
     res = execute_query(cur, schema_query)
     print(res)
     
@@ -161,7 +163,7 @@ if __name__ == "__main__":
 
     # Give permissions to user1
     # update_rules("user1", "iceberg", "icebergtrino", "view1", ["SELECT"])
-    time.sleep(10)
+    # time.sleep(10)
     
     print("user1 select from the view")
     select_query = 'select * from iceberg.icebergtrino.view1'
