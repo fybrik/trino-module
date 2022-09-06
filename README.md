@@ -1,7 +1,12 @@
 # trino-module
 
 ### Install trino
-Use [`trino-getting-started` github repository](https://github.com/bitsondatadev/trino-getting-started) to run trino. First, add the files in the `trino-rules` directory to `trino-getting-started/iceberg/trino-iceberg-minio/etc` directory. Then, run `docker-compose up -d` command from `iceberg/trino-iceberg-minio` directory.
+Install trino and minio using the following commands.
+```bash
+cd iceberg/trino-iceberg-minio/
+docker-compose up -d
+```
+Then, create a bucket with name `iceberg` in minio using [these instructions](https://github.com/bitsondatadev/trino-getting-started/tree/main/hive/trino-minio#create-bucket-in-minio)
 
 ### Install fybrik
 Fybrik Quick Start (v0.6), without the section of `Install modules`.
