@@ -18,7 +18,7 @@ TEMP := /tmp
 CHART_LOCAL_PATH ?= helm-trino-module
 CHART_NAME ?= trino-module-chart
 HELM_RELEASE ?= rel1-${DOCKER_NAME}
-HELM_TAG ?= 0.0.0
+HELM_TAG ?= 0.1.0
 
 CHART_REGISTRY_PATH := oci://${DOCKER_HOSTNAME}/${DOCKER_NAMESPACE}
 
