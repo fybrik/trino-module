@@ -80,6 +80,22 @@ select * from iceberg.icebergtrino.view1;
 ```
 In the output we see only columns (b, c) but not (a, d) because they have a `PII` tag.
 
+You can login into trino as `admin` user using the following command.
+```bash
+docker container exec -it <trino_container_name> trino --user admin
+```
+The admin user can see the original table which is `logs` table. 
+```bash
+show tables from iceberg.icebergtrino;
+```
+The command `show tables` should return the original table `logs` and the created view `view1`.
+
+You can run a query to select from `logs` table. It should return all the columns.
+```bash
+select * from iceberg.icebergtrino.logs;
+```
+In the output we should see columns (a, b, c, d).
+
 ### Cleanup
 When you're finished experimenting with a sample, you can clean up as follows.
 - Deleting the view using `DROP` commands `drop view iceberg.icebergtrino.view1;`.
