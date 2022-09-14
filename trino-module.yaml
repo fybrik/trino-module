@@ -9,7 +9,7 @@ metadata:
 spec:
   type: service
   chart:
-    name: ghcr.io/mohammad-nassar10/trino-module-chart:0.0.0
+    name: ghcr.io/fybrik/trino-module-chart:0.0.0
     values:
       imageChart.tag: main
       trino.host: "trino-client.fybrik-notebook-sample.svc.cluster.local"

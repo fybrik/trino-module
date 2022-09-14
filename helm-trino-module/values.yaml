@@ -3,13 +3,13 @@
 # Declare variables to be passed into your templates.
 
 imageChart: 
-  repository: ghcr.io/mohammad-nassar10/trino-module
+  repository: ghcr.io/fybrik/trino-module
   tag: main
   pullPolicy: Always
   pullSecret: null
 
 imageChartClean: 
-  repository: ghcr.io/mohammad-nassar10/trino-module-clean
+  repository: ghcr.io/fybrik/trino-module-clean
   tag: main
   pullPolicy: Always
   pullSecret: null
