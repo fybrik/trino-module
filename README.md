@@ -34,13 +34,15 @@ kubectl config set-context --current --namespace=fybrik-notebook-sample
 ```bash
 kubectl apply -f sample_assets/asset-iceberg.yaml -n fybrik-notebook-sample
 ```
+In `sample_assets/asset-iceberg.yaml` tags can be added to the columns, here columns `a` and `d` is tagged with `PII` tag.
+
 Replace the values for access_key and secret_key in `sample_asset/secret-iceberg.yaml` file with the values from the object storage service that you used and run:
 ```bash
 kubectl apply -f sample_assets/secret-iceberg.yaml -n fybrik-notebook-sample
 ```
 
 ### Define data access policy
-An example policy of remove columns.
+An example policy of remove columns with `PII` tag.
 ```bash
 kubectl -n fybrik-system create configmap sample-policy --from-file=sample_assets/sample-policy.rego
 kubectl -n fybrik-system label configmap sample-policy openpolicyagent.org/policy=rego
@@ -64,6 +66,7 @@ Wait For the pod `my-notebook-default-trino-module-xxxx` to be completed. This p
 
 For example, you can run trino docker container and run queries. First, check the docker container name of trino (the docker container with the image `trinodb/trino:latest`). Then, Run the following command to run trino server.
 ```bash
+docker ps | grep trinodb/trino:latest
 docker container exec -it <trino_container_name> trino --user user1
 ```
 Check the tables that `user1` can see. It should be only the `view1`.
@@ -75,6 +78,7 @@ You can run a query to select from the created view. It should return only allow
 ```bash
 select * from iceberg.icebergtrino.view1;
 ```
+In the output we see only columns (b, c) but not (a, d) because they have a `PII` tag.
 
 ### Cleanup
 When you're finished experimenting with a sample, you can clean up as follows.
