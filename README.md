@@ -41,13 +41,27 @@ while [[ $(kubectl get cm sample-policy -n fybrik-system -o 'jsonpath={.metadata
 
 ### Deploy Fybrik application which triggers the module
 ```bash
-kubectl apply -f fybrikapplication.yaml -n default
+kubectl apply -f fybrikapplication.yaml
 ```
 Run the following command to wait until the fybrikapplication be ready.
 ```bash
-while [[ $(kubectl get fybrikapplication my-notebook -n default -o 'jsonpath={.status.ready}') != "true" ]]; do echo "waiting for FybrikApplication" && sleep 5; done
+while [[ $(kubectl get fybrikapplication my-notebook -o 'jsonpath={.status.ready}') != "true" ]]; do echo "waiting for FybrikApplication" && sleep 5; done
 ```
 
-Wait For the pod `my-notebook-default-trino-module-xxxx` to be completed. This pod runs a python code that registers the asset in trino and applies the policy to create a virtual dataset. The user can use the following credentials to connect to trino:
+Wait For the pod `my-notebook-default-trino-module-xxxx` to be completed. This pod runs a python code that registers the asset in trino and applies the policy to create a virtual dataset. The user can use the following username to connect to trino:
 
-    "name": "user1", 
+    "name": "user1"
+
+For example, you can run trino docker container and run queries. Run the following command to run trino server.
+```bash
+docker container exec -it trinoicebergminio_trino-coordinator_1 trino --user user1
+```
+Check the tables that `user1` can see. It should be only the `view1`.
+```bash
+show tables from iceberg.icebergtrino;
+```
+
+You can run a query to select from the created view. I should return only allowed columns according to the policies.
+```bash
+select * from iceberg.icebergtrino.view1;
+```

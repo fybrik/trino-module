@@ -161,13 +161,5 @@ if __name__ == "__main__":
     res = execute_query(cur, select_query)
     print(res)
 
-    # Give permissions to user1
-    # update_rules("user1", "iceberg", "icebergtrino", "view1", ["SELECT"])
-    # time.sleep(10)
-    
-    print("user1 select from the view")
-    select_query = 'select * from iceberg.icebergtrino.view1'
-    res = execute_query(cur, select_query)
-    print(res)
 
     
