@@ -12,6 +12,7 @@ Install trino and minio using the following commands.
 ```bash
 cd trino-iceberg-minio/
 docker-compose up -d
+cd ..
 ```
 Then, create a bucket with name `iceberg` in minio using [these instructions](https://github.com/bitsondatadev/trino-getting-started/tree/main/hive/trino-minio#create-bucket-in-minio)
 
@@ -20,7 +21,6 @@ Fybrik [Quick Start (v0.6)](https://fybrik.io/v0.6/get-started/quickstart/), wit
 
 ### Register the fybrikmodule:
 ```bash
-cd ..
 kubectl apply -f trino-module.yaml -n fybrik-system
 ```
 
@@ -53,7 +53,7 @@ while [[ $(kubectl get cm sample-policy -n fybrik-system -o 'jsonpath={.metadata
 ```bash
 kubectl apply -f fybrikapplication.yaml
 ```
-Run the following command to wait until the fybrikapplication be ready.
+Run the following commands to wait until the fybrikapplication be ready.
 ```bash
 while [[ $(kubectl get fybrikapplication my-notebook -o 'jsonpath={.status.ready}') != "true" ]]; do echo "waiting for FybrikApplication" && sleep 5; done
 
