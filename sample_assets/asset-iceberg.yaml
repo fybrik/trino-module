@@ -10,9 +10,9 @@ spec:
     connection:
       name: s3
       s3:
-        endpoint: "s3.us-east.cloud-object-storage.appdomain.cloud"
+        endpoint: "minio:9000"
         bucket: "iceberg"
-        object_key: "table"
+        object_key: "logs"
   metadata:
     name: "Iceberg Data Asset"
     geography: theshire
