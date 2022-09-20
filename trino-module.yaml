@@ -1,4 +1,4 @@
-apiVersion: app.fybrik.io/v1alpha1
+apiVersion: app.fybrik.io/v1beta1
 kind: FybrikModule
 metadata:
   name: trino-module
@@ -9,12 +9,9 @@ metadata:
 spec:
   type: service
   chart:
-    name: ghcr.io/fybrik/trino-module-chart:0.0.0
+    name: ghcr.io/fybrik/trino-module-chart:1.1.0
     values:
-      imageChart.tag: main
-      trino.host: "trino-client.fybrik-notebook-sample.svc.cluster.local"
-      trino.port: "9047"
-      trino.enabled: "false"
+      imageChart.tag: 1.1.0
   capabilities:
     - capability: read
       scope: workload
