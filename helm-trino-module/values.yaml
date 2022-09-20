@@ -4,7 +4,7 @@
 
 imageChart: 
   repository: ghcr.io/fybrik/trino-module
-  tag: 1.1.0
+  tag: 0.1.0
   pullPolicy: Always
   pullSecret: null
 
