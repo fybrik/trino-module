@@ -54,18 +54,6 @@ def get_policy_query(transformation_cols, sql_path, col_names):
     sql_vds = "select " + requested_cols_string + " from " + sql_path
     return sql_vds
 
-def update_rules(username, catalog, schema, table, privileges):
-    jsonFile = open("/home/mohammadtn/trino/trino-server-386/etc/rules.json", "r")
-    data = json.load(jsonFile) # Read the JSON into the buffer
-    jsonFile.close()
-    # data['tables'][1]['table'] = 'table'
-    data['tables'].append({'user': username, 'catalog': catalog, 'schema': schema, 'table': table, 'privileges': privileges})
-
-    jsonFile = open("/home/mohammadtn/trino/trino-server-386/etc/rules.json", "w+")
-    jsonFile.write(json.dumps(data))
-    jsonFile.close()
-
-
 if __name__ == "__main__":
     print("show catalogs")
     cur = connect_user("admin", "iceberg")
