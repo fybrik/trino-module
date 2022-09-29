@@ -6,30 +6,6 @@ import yaml
 
 data_dict = {}
 
-def api_get(server, endpoint=None, headers=None, body=None):
-    """" Run GET command """
-    return json.loads(requests.get(url='{server}/api/v1/{endpoint}'.format(server=server, endpoint=endpoint), headers=headers, data=json.dumps(body)).text)
-
-
-def api_post(server, endpoint=None, body=None, headers=None):
-    """" Run POST command """
-    text = requests.request("POST", '{server}/api/v1/{endpoint}'.format(server=server, endpoint=endpoint), headers=headers, data=json.dumps(body)).text
-
-    # a post may return no data
-    if (text):
-        return json.loads(text)
-    else:
-        return None
-
-
-def api_put(server, endpoint=None, body=None, headers=None):
-    """" Run PUT command """
-    return requests.put('{server}/api/v1/{endpoint}'.format(server=server, endpoint=endpoint), headers=headers, data=json.dumps(body)).text
-
-
-def api_delete(server, endpoint=None, headers=None):
-    """" Run DELETE command """
-    return requests.delete('{server}/api/v1/{endpoint}'.format(server=server, endpoint=endpoint), headers=headers)
 
 def execute_query(cur, query):
     cur.execute(query)
@@ -64,7 +40,7 @@ def get_details_from_conf():
                     transformation_cols = transformations_json[0][transformation]["columns"]
                     data_dict[name] = {'format': data["format"], 'endpoint_url': endpoint_url, 'path': data["path"], 'transformation': transformation,
                      'transformation_cols': transformation_cols}
-
+    print(data_dict[name])
     return data_dict[name]
 
 def get_policy_query(transformation_cols, sql_path, col_names):
@@ -77,18 +53,6 @@ def get_policy_query(transformation_cols, sql_path, col_names):
         requested_cols_string += add_col
     sql_vds = "select " + requested_cols_string + " from " + sql_path
     return sql_vds
-
-def update_rules(username, catalog, schema, table, privileges):
-    jsonFile = open("/home/mohammadtn/trino/trino-server-386/etc/rules.json", "r")
-    data = json.load(jsonFile) # Read the JSON into the buffer
-    jsonFile.close()
-    # data['tables'][1]['table'] = 'table'
-    data['tables'].append({'user': username, 'catalog': catalog, 'schema': schema, 'table': table, 'privileges': privileges})
-
-    jsonFile = open("/home/mohammadtn/trino/trino-server-386/etc/rules.json", "w+")
-    jsonFile.write(json.dumps(data))
-    jsonFile.close()
-
 
 if __name__ == "__main__":
     print("show catalogs")

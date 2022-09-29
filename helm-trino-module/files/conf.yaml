@@ -1,17 +1,18 @@
-trinoHost: {{ .Values.trino.host | default "host missing" }}
-trinoPort: {{ .Values.trino.port | default "port missing" }}
-{{ if .Values.read -}}
+{{ if .Values.assets -}}
 data:
-{{- range .Values.read }}
-  - format: {{ .source.format }}
-    name: {{ .assetID | quote }}
-    {{- if .source.connection.s3 }}
-    path: "{{ .source.connection.s3.bucket }}/{{ .source.connection.s3.object_key }}"
+{{- range $asset := .Values.assets }}
+  - name: {{ $asset.assetID | quote }}
+    capability: {{ $asset.capability }}
+    {{- if and (.args) (eq (len .args) 1) -}}
+    {{- with (index .args 0) }}
+    format: {{ .format | quote }}
+    {{- if index . "connection" "s3" }}
+    path: "{{ .connection.s3.bucket }}/{{ .connection.s3.object_key }}"
     connection:
       type: s3
       s3:
-        endpoint_url: {{ .source.connection.s3.endpoint }}
-        {{- range $k, $v := .source.vault }}
+        endpoint_url: {{ .connection.s3.endpoint }}
+        {{- range $k, $v := .vault }}
         {{- if or (eq $k "read") (eq $k "write") }}
         vault_credentials:
           {{- if $v.address }}
@@ -29,8 +30,10 @@ data:
         {{- end }}
         {{- end }}
     {{- end }}
-    {{- if .transformations }}
-    transformations: {{ .transformations | toJson | b64enc | quote }}
+    {{- end }}
+    {{- end }}
+    {{- if $asset.transformations }}
+    transformations: {{ $asset.transformations | toJson | b64enc | quote }}
     {{- end }}
 {{- end -}}
 {{- else -}}
