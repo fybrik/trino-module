@@ -17,7 +17,7 @@ cd ..
 Then, create a bucket with name `iceberg` in minio using [these instructions](https://github.com/bitsondatadev/trino-getting-started/tree/main/hive/trino-minio#create-bucket-in-minio)
 
 ### Install fybrik
-Fybrik [Quick Start (v1.1)](https://fybrik.io/v1.1/get-started/quickstart/), without the section of `Install modules`.
+Fybrik [Quick Start (v0.6)](https://fybrik.io/v0.6/get-started/quickstart/), without the section of `Install modules`.
 
 ### Register the fybrikmodule:
 ```bash
@@ -64,23 +64,11 @@ The module runs a python code that registers the asset in trino and applies the 
 
     "name": "user1"
 
-For example, you can run trino docker container and run queries. First, check the docker container name of trino (the docker container with the image `trinodb/trino:latest`). Then, Run the following command to run trino server:
+For example, you can run trino docker container and run queries. First, check the docker container name of trino (the docker container with the image `trinodb/trino:latest`).
 ```bash
 docker ps | grep trinodb/trino:latest
-docker container exec -it <trino_container_name> trino --user user1
 ```
-Check the tables that `user1` can see. It should be only the `view1`:
-```bash
-show tables from iceberg.icebergtrino;
-```
-
-You can run a query to select from the created view. It should return only allowed columns according to the policies:
-```bash
-select * from iceberg.icebergtrino.view1;
-```
-In the output we see only columns (b, c) but not (a, d) because they have a `PII` tag.
-
-You can login into trino as `admin` user using the following command (after exiting from trino container):
+Then, Run the following command to run trino server with `admin` user:
 ```bash
 docker container exec -it <trino_container_name> trino --user admin
 ```
@@ -95,6 +83,19 @@ You can run a query to select from `logs` table. It should return all the column
 select * from iceberg.icebergtrino.logs;
 ```
 In the output we should see columns (a, b, c, d).
+
+You can login into trino as `user1` user using the following command (after exiting from trino container):
+```bash
+docker container exec -it <trino_container_name> trino --user user1
+```
+
+You can run a query as `user1` to select from `logs` table. It should return only allowed columns according to the policies:
+```bash
+select * from iceberg.icebergtrino.logs;
+```
+In the output we see only columns (b, c) but not (a, d) because they have a `PII` tag.
+This query goes through a proxy trino that modifies the query to select from `view1` view instead of `logs` table because `user1` is allowed to select from `view1` only and not from `logs`.
+
 
 ### Cleanup
 When you're finished experimenting with a sample, you can clean up as follows.

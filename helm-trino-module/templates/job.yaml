@@ -28,7 +28,7 @@ spec:
           {{- end }}
           ports:
             - name: grpc
-              containerPort: 8080
+              containerPort: 8088
               protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

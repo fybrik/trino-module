@@ -2,4 +2,3 @@
 trino
 
 ###### Requirements with version specifiers ######
-
