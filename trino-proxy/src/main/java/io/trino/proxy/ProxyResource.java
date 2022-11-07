@@ -248,12 +248,11 @@ public class ProxyResource
         Request request = requestBuilder
                 .setPreserveAuthorizationOnRedirect(true)
                 .build();
-        String trinoUser = request.getHeader("X-Trino-User");
-        System.out.printf("performRequest trinoUser = %s", trinoUser);
         ListenableFuture<Response> future = executeHttp(request)
                 .transform(responseBuilder::apply, executor)
                 .catching(ProxyException.class, e -> handleProxyException(request, e), directExecutor());
 
+        
         setupAsyncResponse(asyncResponse, future);
     }
 
