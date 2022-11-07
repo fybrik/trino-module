@@ -45,9 +45,6 @@ public class ProxyResponseHandler
     @Override
     public ProxyResponse handle(Request request, Response response)
     {
-        // System.out.println("handle proxy");
-        // System.out.printf("request is = %s", request);
-        // System.out.printf("response is = %s", response);
         if (response.getStatusCode() == NO_CONTENT.code()) {
             return new ProxyResponse(response.getHeaders(), new byte[0]);
         }

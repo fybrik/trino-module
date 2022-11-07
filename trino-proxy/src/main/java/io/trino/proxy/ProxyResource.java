@@ -139,7 +139,6 @@ public class ProxyResource
             @Context HttpServletRequest servletRequest,
             @Suspended AsyncResponse asyncResponse)
     {
-        // System.out.printf("getInfo servletRequest = %s", servletRequest);
         Request.Builder request = prepareGet()
                 .setUri(uriBuilderFrom(remoteUri).replacePath("/v1/info").build());
 
