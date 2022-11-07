@@ -17,7 +17,7 @@ cd ..
 Then, create a bucket with name `iceberg` in minio using [these instructions](https://github.com/bitsondatadev/trino-getting-started/tree/main/hive/trino-minio#create-bucket-in-minio)
 
 ### Install fybrik
-Fybrik [Quick Start (v0.6)](https://fybrik.io/v0.6/get-started/quickstart/), without the section of `Install modules`.
+Fybrik [Quick Start (v1.1)](https://fybrik.io/v1.1/get-started/quickstart/), without the section of `Install modules`.
 
 ### Register the fybrikmodule:
 ```bash
