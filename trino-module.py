@@ -141,3 +141,8 @@ if __name__ == "__main__":
     select_query = 'select * from iceberg.icebergtrino.view1'
     res = execute_query(cur, select_query)
     print(res)
+
+    # Stop trino proxy
+    os.system('trino-proxy/bin/launcher stop')
+    # Run trino proxy
+    os.system('trino-proxy/bin/launcher run')
