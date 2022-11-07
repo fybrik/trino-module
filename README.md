@@ -55,7 +55,7 @@ while [[ $(kubectl get cm sample-policy -n fybrik-system -o 'jsonpath={.metadata
 ```bash
 kubectl apply -f fybrikapplication.yaml
 ```
-Run the following command to wait Wait for the fybrik module:
+Run the following command to wait for the fybrik module:
 ```bash
 while [[ ($(kubectl get fybrikapplication my-notebook -o 'jsonpath={.status.ready}') != "true") || ($(kubectl get jobs my-notebook-fybrik-notebook-sample-trino-module -n fybrik-blueprints -o 'jsonpath={.status.conditions[0].type}') != "Complete") ]]; do echo "waiting for FybrikApplication" && sleep 5; done
 ```
@@ -64,31 +64,33 @@ The module runs a python code that registers the asset in trino and applies the 
 
     "name": "user1"
 
-For example, you can run trino docker container and run queries. First, check the docker container name of trino (the docker container with the image `trinodb/trino:latest`).
+For example, you can use trino CLI to run queries. To install trino CLI you can follow this [guide](https://trino.io/docs/current/client/cli.html#installation).
+
+In order to connect to the trino proxy server you can run a port-forward command as follows:
 ```bash
-docker ps | grep trinodb/trino:latest
+kubectl port-forward svc/my-notebook-fybrik-notebook-sample-trino-module -n fybrik-blueprints 8088:80 &
 ```
-Then, Run the following command to run trino server with `admin` user:
+
+Then, you can run trino CLI with the server that runs at `127.0.0.1:8088` with the `admin` user as follows:
 ```bash
-docker container exec -it <trino_container_name> trino --user admin
+trino --server 127.0.0.1:8088 --user admin
 ```
-The admin user can see the original table which is `logs` table:
+This will open a trino terminal, The `admin` user can see the original table which is `logs` table:
 ```bash
 show tables from iceberg.icebergtrino;
 ```
 The command `show tables` should return the original table `logs` and the created view `view1`.
 
-You can run a query to select from `logs` table. It should return all the columns.
+The `admin` user can select from the `logs` table as follows:
 ```bash
 select * from iceberg.icebergtrino.logs;
 ```
-In the output we should see columns (a, b, c, d).
+In the output the user should see all the columns (a, b, c, d).
 
-You can login into trino as `user1` user using the following command (after exiting from trino container):
+Now, you can try to run trino CLI with the `user1` user as follows:
 ```bash
-docker container exec -it <trino_container_name> trino --user user1
+trino --server 127.0.0.1:8088 --user user1
 ```
-
 You can run a query as `user1` to select from `logs` table. It should return only allowed columns according to the policies:
 ```bash
 select * from iceberg.icebergtrino.logs;
@@ -102,7 +104,7 @@ When you're finished experimenting with a sample, you can clean up as follows.
 1. Deleting the view using `DROP` commands `drop view iceberg.icebergtrino.view1;`.
 1. Deleting the iceberg table must be done by `admin` user:
     ```bash
-    docker container exec -it <trino_container_name> trino --user admin
+    trino --server 127.0.0.1:8088 --user admin
     drop table iceberg.icebergtrino.logs;
     ```
 1. Clean the docker containers:
