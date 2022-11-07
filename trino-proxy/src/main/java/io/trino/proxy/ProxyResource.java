@@ -156,15 +156,12 @@ public class ProxyResource
             @Suspended AsyncResponse asyncResponse)
     {
         System.out.printf("postStatement statement = %s", statement);
-        // System.out.printf("postStatement first table = %s", this.mapTableToView.keySet().toArray()[0].toString());
         String user = "";
 
         ArrayList<String> headers = list(servletRequest.getHeaderNames());
         if(headers.contains("X-Trino-User")) {
-                // System.out.printf("postStatement X-Trino-User exists");
                 for (String value : list(servletRequest.getHeaders("X-Trino-User"))) {
                     user = value;
-                    // System.out.printf("postStatement headers values = %s", user);
             }
         }
         if(user.equals("user1")) {
@@ -187,8 +184,6 @@ public class ProxyResource
                 .setUri(uriBuilderFrom(remoteUri).replacePath("/v1/statement").build())
                 .setBodyGenerator(createStaticBodyGenerator(statement, UTF_8));
 
-        // String trinoUser = request.getHeader("X-Trino-User");
-        // System.out.printf("performRequest func request = %s, trinoUser = %s", request, trinoUser);
         performRequest(servletRequest, asyncResponse, request, response -> buildResponse(uriInfo, response));
     }
 
@@ -202,8 +197,6 @@ public class ProxyResource
             @Context UriInfo uriInfo,
             @Suspended AsyncResponse asyncResponse)
     {
-        // System.out.printf("getNext uri = %s, servletRequest = %s, uriInfo = %s, hash = %s", uri, servletRequest, uriInfo, hash);
-        // System.out.printf("getNext hashCode = %s, hashString = %s", HashCode.fromString(hash), hmac.hashString(uri, UTF_8));
         if (!hmac.hashString(uri, UTF_8).equals(HashCode.fromString(hash))) {
             throw badRequest(FORBIDDEN, "Failed to validate HMAC of URI");
         }
@@ -237,14 +230,11 @@ public class ProxyResource
             Request.Builder requestBuilder,
             Function<ProxyResponse, Response> responseBuilder)
     {
-        // System.out.printf("performRequest func servletRequest = %s", servletRequest);
         setupBearerToken(servletRequest, requestBuilder);
 
         for (String name : list(servletRequest.getHeaderNames())) {
-            // System.out.printf("performRequest headers = %s", name);
             if (isTrinoHeader(name) || name.equalsIgnoreCase(COOKIE)) {
                 for (String value : list(servletRequest.getHeaders(name))) {
-                    // System.out.printf("performRequest headers values = %s", value);
                     requestBuilder.addHeader(name, value);
                 }
             }
@@ -275,7 +265,6 @@ public class ProxyResource
 
     private String rewriteUri(UriInfo uriInfo, String uri)
     {
-        // System.out.printf("rewriteUri uri = %s", uri);
         return uriInfo.getAbsolutePathBuilder()
                 .replacePath("/v1/proxy")
                 .queryParam("uri", uri)
@@ -296,7 +285,6 @@ public class ProxyResource
 
     private FluentFuture<ProxyResponse> executeHttp(Request request)
     {
-        // System.out.printf("executeHttp func, request = %s", request);
         return FluentFuture.from(httpClient.executeAsync(request, new ProxyResponseHandler()));
     }
 
