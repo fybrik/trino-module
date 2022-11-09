@@ -18,6 +18,5 @@ RUN apt-get update && \
 COPY trino-docker/requirements.txt /tmp/requirements.txt
 RUN python3 -m pip install --no-cache-dir -r /tmp/requirements.txt
 
-# ENTRYPOINT ["tail", "-f", "/dev/null"]
 ENTRYPOINT ["python3"]
 CMD ["trino-module.py"]
