@@ -117,11 +117,11 @@ if __name__ == "__main__":
 
     # Example queries
     # Configure the trino proxy
-    with open("trino-proxy/etc/config.properties", "a") as file_obj:
+    with open("trino-proxy-server/etc/config.properties", "a") as file_obj:
         file_obj.write("\nproxy.change-names=iceberg.icebergtrino.logs:iceberg.icebergtrino.view1")
     
     # Run trino proxy
-    os.system('trino-proxy/bin/launcher start')
+    os.system('trino-proxy-server/bin/launcher start')
     time.sleep(30)
 
     # Connect to proxy trino as "admin" user
@@ -143,6 +143,6 @@ if __name__ == "__main__":
     print(res)
 
     # Stop trino proxy
-    os.system('trino-proxy/bin/launcher stop')
+    os.system('trino-proxy-server/bin/launcher stop')
     # Run trino proxy
-    os.system('trino-proxy/bin/launcher run')
+    os.system('trino-proxy-server/bin/launcher run')

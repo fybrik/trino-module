@@ -2,7 +2,7 @@ FROM python:3.8-slim
 
 WORKDIR /app
 COPY trino-module.py trino-module.py
-COPY trino-docker/trino-proxy-356 trino-proxy
+ADD trino-docker/trino-proxy-server.tar.gz .
 ENV FORMAT "dummy format"
 ENV DATAPATH "dummy datapath"
 ENV NAME "dummy data asset name"
