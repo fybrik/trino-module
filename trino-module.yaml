@@ -9,9 +9,9 @@ metadata:
 spec:
   type: service
   chart:
-    name: ghcr.io/fybrik/trino-module-chart:0.1.0
+    name: ghcr.io/fybrik/trino-module-chart:0.3.0
     values:
-      imageChart.tag: 0.1.0
+      imageChart.tag: 0.3.0
   capabilities:
     - capability: read
       scope: workload

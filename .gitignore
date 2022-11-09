@@ -1,0 +1,4 @@
+.vscode/
+trino-proxy/target/
+trino-docker/trino-proxy-server/
+trino-proxy/.vscode/

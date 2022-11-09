@@ -3,6 +3,7 @@ import base64
 import json
 import trino
 import yaml
+import os
 
 data_dict = {}
 
@@ -17,9 +18,9 @@ def execute_query(cur, query):
         print(e)
     # return res
 
-def connect_user(username, catalog):
-    conn = trino.dbapi.connect(host='host.docker.internal', port=8080, user=username, catalog=catalog)
-    # conn = trino.dbapi.connect(host='localhost', port=8080, user=username, catalog=catalog)
+def connect_user(username, catalog, host, port):
+    # conn = trino.dbapi.connect(host='host.docker.internal', port=8080, user=username, catalog=catalog)
+    conn = trino.dbapi.connect(host=host, port=port, user=username, catalog=catalog)
     cur = conn.cursor()
     return cur
 
@@ -56,18 +57,18 @@ def get_policy_query(transformation_cols, sql_path, col_names):
 
 if __name__ == "__main__":
     print("show catalogs")
-    cur = connect_user("admin", "iceberg")
+    cur = connect_user("admin", "iceberg", "host.docker.internal", "8080")
     res = execute_query(cur, "SHOW CATALOGS")
     print(res)
 
     print("create schema")
-    schema_query = "create schema hive.icebergtrino with (location = 's3a://iceberg/')"
+    schema_query = "create schema if not exists hive.icebergtrino with (location = 's3a://iceberg/')"
     # schema_query = "create schema hive.icebergtrino with (location = 's3a://fybric-objectstorage-iceberg-demo/warehouse/db/')"
 
     res = execute_query(cur, schema_query)
     print(res)
     
-    create_table_query = "create table iceberg.icebergtrino.logs (\
+    create_table_query = "create table if not exists iceberg.icebergtrino.logs (\
         a DOUBLE,\
         b DOUBLE,\
         c DOUBLE,\
@@ -107,16 +108,32 @@ if __name__ == "__main__":
     # view_query = "create view iceberg.icebergtrino.view1 as select event_time, message from iceberg.icebergtrino.logs"
     view_query = "create view iceberg.icebergtrino.view1 as " + sql_view
     print(view_query)
-    res = execute_query(cur, view_query)
-    print(res)
+    try:
+        res = execute_query(cur, view_query)
+        print(res)
+    except:
+        print("view already exists")
 
+
+    # Example queries
+    # Configure the trino proxy
+    with open("trino-proxy-server/etc/config.properties", "a") as file_obj:
+        file_obj.write("\nproxy.change-names=iceberg.icebergtrino.logs:iceberg.icebergtrino.view1")
+    
+    # Run trino proxy
+    os.system('trino-proxy-server/bin/launcher start')
+    time.sleep(30)
+
+    # Connect to proxy trino as "admin" user
+    cur = connect_user("admin", "iceberg", "localhost", "8088")
     print("select from the table")
     select_query = 'select * from iceberg.icebergtrino.logs'
     res = execute_query(cur, select_query)
     print(res)
 
-    print("user1 select")
-    cur = connect_user("user1", "iceberg")
+    # Connect to proxy trino as "user1" user
+    print("user1 select from the table")
+    cur = connect_user("user1", "iceberg", "localhost", "8088")
     res = execute_query(cur, select_query)
     print(res)
 
@@ -125,5 +142,7 @@ if __name__ == "__main__":
     res = execute_query(cur, select_query)
     print(res)
 
-
-    
+    # Stop trino proxy
+    os.system('trino-proxy-server/bin/launcher stop')
+    # Run trino proxy
+    os.system('trino-proxy-server/bin/launcher run')
